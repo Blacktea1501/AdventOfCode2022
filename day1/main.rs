@@ -28,33 +28,27 @@ fn part1() {
 
 fn part2() {
     let vec = read("in.txt");
-    let mut sum: i32 = 0;
-    let mut numbers: Vec<i32> = Vec::new();
+    let mut num: i32 = 0;
+    let (mut f, mut s, mut t) = (0, 0, 0);
     for line in vec {
         if line == "" {
-            numbers.push(sum);
-            sum = 0;
+            if num > f {
+                t = s;
+                s = f;
+                f = num;
+            } else if num > s && num != f {
+                t = s;
+                s = num;
+            } else if num > t && num != s {
+                t = num;
+            }
+
+            num = 0;
         } else {
-            sum += line.parse::<i32>().unwrap();
+            num += line.parse::<i32>().unwrap();
         }
     }
-
-    let (mut fst, mut snd, mut trd) = (0, 0, 0);
-    // getting the 3 largest numbers
-    for n in numbers {
-        if n > fst {
-            trd = snd;
-            snd = fst;
-            fst = n;
-        } else if n > snd && n != fst {
-            trd = snd;
-            snd = n;
-        } else if n > trd && n != snd {
-            trd = n;
-        }
-    }
-
-    println!("Part2: {}", fst + snd + trd);
+    println!("Part2: {}", f + s + t);
 }
 
 // file reader i copied from stackoverflow:
