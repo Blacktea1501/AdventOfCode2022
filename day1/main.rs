@@ -54,7 +54,7 @@ fn part2() {
         }
     }
 
-    print!("Part2: {}", fst + snd + trd);
+    println!("Part2: {}", fst + snd + trd);
 }
 
 // file reader i copied from stackoverflow:
