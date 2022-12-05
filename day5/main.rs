@@ -32,8 +32,10 @@ fn part1() {
     ];
 
     let mut res = String::new();
+
     for line in input {
         let instructions: Vec<usize> = modify_string(line);
+
         for _ in 0..instructions[0] {
             if !s[instructions[1] - 1].is_empty() {
                 let cargo = s[instructions[1] - 1].pop().unwrap();
@@ -41,17 +43,19 @@ fn part1() {
             }
         }
     }
+
     for i in 0..9 {
         if !s[i].is_empty() {
             res.push(s[i].pop().unwrap());
         }
     }
+
     println!("Part1: {}", res);
 }
 
 fn part2() {
     let input = read("in.txt");
-    let mut s: Vec<Vec<char>> = vec![
+    let mut s = [
         vec!['B', 'P', 'N', 'Q', 'H', 'D', 'R', 'T'],
         vec!['W', 'G', 'B', 'J', 'T', 'V'],
         vec!['N', 'R', 'H', 'D', 'S', 'V', 'M', 'Q'],
@@ -68,11 +72,13 @@ fn part2() {
     for line in input {
         let instructions: Vec<usize> = modify_string(line);
         let mut crates = Vec::new();
+
         for _ in 0..instructions[0] {
             if !s[instructions[1] - 1].is_empty() {
                 crates.push(s[instructions[1] - 1].pop().unwrap());
             }
         }
+
         for _ in 0..instructions[0] {
             if !crates.is_empty() {
                 s[instructions[2] - 1].push(crates.pop().unwrap());
