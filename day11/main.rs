@@ -25,7 +25,6 @@ impl Monkey {
     }
 }
 
-
 fn main() {
     part1();
     part2();
@@ -38,15 +37,12 @@ fn part1() {
     let rounds: usize = 20;
     for _ in 0..rounds {
         for i in 0..*monkeys_len {
-            //println!("{:?}", monkeys[i]);
             let items_len = monkeys[i].items.len();
             for _ in 0..items_len {
                 let mut item = monkeys[i].items.remove(0);
                 inspection_counter[i] += 1;
                 item = operation(&monkeys[i].operation, item);
-                // divide item by 3 and round down
                 item = (item as f64 / 3.0).floor() as i64;
-                //println!("Item after operation: {}", item);
                 if item % monkeys[i].test == 0 {
                     let if_true = monkeys[i].if_true;
                     monkeys[if_true].items.push(item);
@@ -61,7 +57,7 @@ fn part1() {
     inspection_counter.sort();
     let max = inspection_counter[inspection_counter.len() - 1];
     let max2 = inspection_counter[inspection_counter.len() - 2];
-    println!("Part1: {}", max*max2);
+    println!("Part1: {}", max * max2);
 }
 
 fn part2() {
@@ -69,12 +65,10 @@ fn part2() {
     let monkeys_len = &monkeys.len();
     let mut inspection_counter: Vec<u128> = vec![0; *monkeys_len];
     let rounds: usize = 10_000;
-    // least common divider from moneys test
-    let lcd = monkeys.iter().map(|m| m.test).product::<i64>();
+    let lcm = monkeys.iter().map(|m| m.test).product::<i64>();
 
     for _ in 0..rounds {
         for i in 0..*monkeys_len {
-
             let items_len = monkeys[i].items.len();
             for _ in 0..items_len {
                 let mut item = monkeys[i].items.remove(0);
@@ -83,8 +77,7 @@ fn part2() {
 
                 item = operation(&monkeys[i].operation, item);
 
-                item = item % lcd;
-
+                item = item % lcm;
 
                 if item % monkeys[i].test == 0 {
                     let if_true = monkeys[i].if_true;
@@ -97,15 +90,12 @@ fn part2() {
         }
     }
 
-    //println!("Inspection: {:?}", inspection_counter);
-
     inspection_counter.sort();
     let max = inspection_counter[inspection_counter.len() - 1];
     let max2 = inspection_counter[inspection_counter.len() - 2];
 
-    println!("Part2: {}", max*max2);
+    println!("Part2: {}", max * max2);
 }
-
 
 fn operation(operation: &String, item: i64) -> i64 {
     let cond1 = operation.contains("old * o");
@@ -131,22 +121,18 @@ fn parse_monkeys() -> Vec<Monkey> {
             continue;
         }
         if line.contains("Starting items") {
-            // remove "Starting items: " from line
             let mod_line = &line[18..];
-            // split line into items as i32
             for item in mod_line.split(", ") {
                 monkey.items.push(item.parse::<i64>().unwrap());
             }
             continue;
         }
         if line.contains("Operation") {
-            // remove "  Operation: " from line
             let mod_line = &line[19..];
             monkey.operation = mod_line.to_string();
             continue;
         }
         if line.contains("Test") {
-            // remove "Test: divisible by " from line and strip whitespace
             monkey.test = *&line[20..].trim().parse::<i64>().unwrap();
             continue;
         }
@@ -156,7 +142,6 @@ fn parse_monkeys() -> Vec<Monkey> {
         }
         if line.contains("If false") {
             monkey.if_false = *&line[29..].trim().parse::<usize>().unwrap();
-            // push monkey to monkeys
             monkeys.push(monkey);
             monkey = Monkey::new();
             continue;
@@ -168,5 +153,8 @@ fn parse_monkeys() -> Vec<Monkey> {
 fn read(filename: impl AsRef<Path>) -> Vec<String> {
     let f: File = File::open(filename).expect("file not found");
     let buf_reader = BufReader::new(f);
-    buf_reader.lines().map(|l| l.expect("Could not parse line")).collect()
+    buf_reader
+        .lines()
+        .map(|l| l.expect("Could not parse line"))
+        .collect()
 }
